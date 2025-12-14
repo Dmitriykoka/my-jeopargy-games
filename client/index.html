@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <!-- Обязательный тег для адаптивности на мобильных устройствах -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Своя Игра: Real-time Buzzer</title>
+    
+    <!-- Подключение шрифтов Google, используемых в стилях Tailwind -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- 
+      В режиме разработки Vite автоматически вставит скрипт main.jsx.
+      В нашем случае, поскольку мы объединили все в App.jsx,
+      мы будем запускать его через сборщик.
+      
+      Внимание: Tailwind CDN будет загружен и настроен внутри App.jsx
+      через <style> и <script> теги для обеспечения однофайловой работы! 
+    -->
+</head>
+<body class="bg-jeopardy-main">
+    <!-- Главный контейнер, куда React монтирует приложение -->
+    <div id="root"></div>
+    
+    <!-- 
+      В стандартном проекте Vite здесь 
+
+будет:
+      <script type="module" src="/src/main.jsx"></script>
+
+</body>
+</html>
