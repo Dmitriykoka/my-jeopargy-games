@@ -311,3 +311,4 @@ button.ghost {
   background: #234366;
   color: var(--text);
 }
+[hidden] { display: none !important; }
