@@ -1,0 +1,68 @@
+{
+  "id": "demo-pack-001",
+  "name": "Демо-пакет",
+  "createdAt": "2026-09-16T00:00:00.000Z",
+  "updatedAt": "2026-09-16T00:00:00.000Z",
+  "categories": [
+    {
+      "id": "cat-history",
+      "name": "История",
+      "questions": [
+        {
+          "id": "q1",
+          "cost": 100,
+          "question": "В каком году основан Санкт-Петербург?",
+          "answer": "1703",
+          "media": null,
+          "mediaType": null
+        },
+        {
+          "id": "q2",
+          "cost": 200,
+          "question": "Кто был первым императором России?",
+          "answer": "Пётр I",
+          "media": null,
+          "mediaType": null
+        },
+        {
+          "id": "q3",
+          "cost": 300,
+          "question": "В каком году произошла Октябрьская революция?",
+          "answer": "1917",
+          "media": null,
+          "mediaType": null
+        }
+      ]
+    },
+    {
+      "id": "cat-science",
+      "name": "Наука",
+      "questions": [
+        {
+          "id": "q4",
+          "cost": 100,
+          "question": "Химический символ золота?",
+          "answer": "Au",
+          "media": null,
+          "mediaType": null
+        },
+        {
+          "id": "q5",
+          "cost": 200,
+          "question": "Сколько планет в Солнечной системе?",
+          "answer": "8",
+          "media": null,
+          "mediaType": null
+        },
+        {
+          "id": "q6",
+          "cost": 300,
+          "question": "Кто предложил теорию относительности?",
+          "answer": "Эйнштейн",
+          "media": null,
+          "mediaType": null
+        }
+      ]
+    }
+  ]
+}
