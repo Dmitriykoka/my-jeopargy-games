@@ -192,55 +192,80 @@ function renderBoard() {
   });
 }
 
+let overlayMode = null;
+
+function updateTimerLabels() {
+  const el = document.getElementById('ov-timer');
+  if (!el) return;
+  if (state.gameStatus === 'BUZZ_OPEN') el.textContent = `Buzz: ${buzzLeft}с`;
+  if (state.gameStatus === 'ANSWERING') el.textContent = `Осталось: ${answerLeft}с`;
+}
+
 function renderOverlay() {
   const ov = $('question-overlay');
   const q = state.currentQuestion;
   const show =
     q && ['QUESTION_READING', 'BUZZ_OPEN', 'ANSWERING'].includes(state.gameStatus);
   ov.hidden = !show;
-  if (!show) return;
+  if (!show) {
+    overlayMode = null;
+    return;
+  }
 
-  $('ov-meta').textContent = `Стоимость: ${q.cost}`;
-  $('ov-question').textContent = q.q;
-  renderMedia($('ov-media'), q);
+  const mode = state.gameStatus;
+  const sameQuestionUi =
+    overlayMode === mode &&
+    ov.dataset.qid === String(q.id || q.q);
 
-  const status = $('ov-status');
-  const actions = $('ov-actions');
-  const answerWrap = $('ov-answer-wrap');
-  $('ov-answer').textContent = q.a;
-  answerWrap.hidden = state.gameStatus !== 'ANSWERING';
+  if (!sameQuestionUi) {
+    overlayMode = mode;
+    ov.dataset.qid = String(q.id || q.q);
+    $('ov-meta').textContent = `Стоимость: ${q.cost}`;
+    $('ov-question').textContent = q.q;
+    renderMedia($('ov-media'), q);
 
-  if (state.gameStatus === 'QUESTION_READING') {
-    status.innerHTML = '<span class="muted">Прочитайте вопрос, затем откройте кнопки</span>';
-    actions.innerHTML = `
-      <button type="button" class="ok" id="btn-open-buzz">Открыть кнопки</button>
-      <button type="button" class="secondary" id="btn-skip">Пропустить</button>`;
-    $('btn-open-buzz').onclick = () => socket.emit('host_open_buzzers');
-    $('btn-skip').onclick = () => socket.emit('host_skip_question');
-  } else if (state.gameStatus === 'BUZZ_OPEN') {
-    status.innerHTML = `<strong style="font-size:1.6rem;color:var(--gold)">ЖМИТЕ!</strong>
-      <div class="muted">Buzz: ${buzzLeft}с</div>`;
-    actions.innerHTML = `<button type="button" class="secondary" id="btn-skip">Никто не знает — снять</button>`;
-    $('btn-skip').onclick = () => socket.emit('host_skip_question');
-  } else if (state.gameStatus === 'ANSWERING') {
-    const who = state.buzzerList?.[0]?.name || 'Игрок';
-    status.innerHTML = `<strong style="font-size:1.8rem;color:#ff6b6b">${escapeHtml(who)} отвечает</strong>
-      <div class="muted">Осталось: ${answerLeft}с</div>`;
-    actions.innerHTML = `
-      <button type="button" class="ok" id="btn-yes">Верно (+${q.cost})</button>
-      <button type="button" class="bad" id="btn-no">Неверно (−${q.cost})</button>`;
-    $('btn-yes').onclick = () => socket.emit('host_resolve_answer', { correct: true });
-    $('btn-no').onclick = () => socket.emit('host_resolve_answer', { correct: false });
+    const status = $('ov-status');
+    const actions = $('ov-actions');
+    const answerWrap = $('ov-answer-wrap');
+    $('ov-answer').textContent = q.a;
+    answerWrap.hidden = mode !== 'ANSWERING';
+
+    if (mode === 'QUESTION_READING') {
+      status.innerHTML =
+        '<span class="muted">Прочитайте вопрос, затем откройте кнопки</span>';
+      actions.innerHTML = `
+        <button type="button" class="ok" id="btn-open-buzz">Открыть кнопки</button>
+        <button type="button" class="secondary" id="btn-skip">Пропустить</button>`;
+      $('btn-open-buzz').onclick = () => socket.emit('host_open_buzzers');
+      $('btn-skip').onclick = () => socket.emit('host_skip_question');
+    } else if (mode === 'BUZZ_OPEN') {
+      status.innerHTML = `<strong style="font-size:1.6rem;color:var(--gold)">ЖМИТЕ!</strong>
+        <div class="muted" id="ov-timer">Buzz: ${buzzLeft}с</div>`;
+      actions.innerHTML = `<button type="button" class="secondary" id="btn-skip">Никто не знает — снять</button>`;
+      $('btn-skip').onclick = () => socket.emit('host_skip_question');
+    } else if (mode === 'ANSWERING') {
+      const who = state.buzzerList?.[0]?.name || 'Игрок';
+      status.innerHTML = `<strong style="font-size:1.8rem;color:#ff6b6b">${escapeHtml(who)} отвечает</strong>
+        <div class="muted" id="ov-timer">Осталось: ${answerLeft}с</div>`;
+      actions.innerHTML = `
+        <button type="button" class="ok" id="btn-yes">Верно (+${q.cost})</button>
+        <button type="button" class="bad" id="btn-no">Неверно (−${q.cost})</button>`;
+      $('btn-yes').onclick = () => socket.emit('host_resolve_answer', { correct: true });
+      $('btn-no').onclick = () => socket.emit('host_resolve_answer', { correct: false });
+    }
+  } else {
+    updateTimerLabels();
   }
 }
 
 function startBuzzCountdown(sec) {
   clearBuzzCountdown();
   buzzLeft = sec;
+  updateTimerLabels();
   buzzInterval = setInterval(() => {
     buzzLeft -= 1;
     if (buzzLeft <= 0) clearBuzzCountdown();
-    if (state.gameStatus === 'BUZZ_OPEN') renderOverlay();
+    updateTimerLabels();
   }, 1000);
 }
 
@@ -252,10 +277,11 @@ function clearBuzzCountdown() {
 function startAnswerCountdown(sec) {
   clearAnswerCountdown();
   answerLeft = sec;
+  updateTimerLabels();
   answerInterval = setInterval(() => {
     answerLeft -= 1;
     if (answerLeft <= 0) clearAnswerCountdown();
-    if (state.gameStatus === 'ANSWERING') renderOverlay();
+    updateTimerLabels();
   }, 1000);
 }
 
