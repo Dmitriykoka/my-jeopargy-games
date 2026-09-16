@@ -248,6 +248,28 @@ app.get('/api/info', (_req, res) => {
   });
 });
 
+app.get('/api/qr', async (req, res) => {
+  try {
+    const QRCode = require('qrcode');
+    const text = String(req.query.url || '').trim();
+    if (!text || text.length > 512) {
+      return res.status(400).json({ error: 'url required' });
+    }
+    const png = await QRCode.toBuffer(text, {
+      type: 'png',
+      width: 180,
+      margin: 1,
+      errorCorrectionLevel: 'M',
+    });
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(png);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'QR error' });
+  }
+});
+
 app.get('/api/packs', (_req, res) => {
   res.json(listPacks());
 });

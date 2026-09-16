@@ -110,10 +110,9 @@ function updateQr() {
   const port = location.port || state.port || '3000';
   const url = `${location.protocol}//${host}:${port}/player`;
   $('join-url').textContent = url;
-  if (window.QRCode) {
-    QRCode.toCanvas($('qr'), url, { width: 180, margin: 1 }, (err) => {
-      if (err) console.error(err);
-    });
+  const img = $('qr');
+  if (img) {
+    img.src = `/api/qr?url=${encodeURIComponent(url)}`;
   }
 }
 

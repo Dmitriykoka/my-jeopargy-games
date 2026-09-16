@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/app.css" />
   <script src="/socket.io/socket.io.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
   <div class="wrap" id="app">
@@ -30,7 +29,7 @@
       </div>
       <div class="panel" style="text-align:center">
         <h2 style="margin-top:0">QR для входа</h2>
-        <canvas id="qr" width="180" height="180"></canvas>
+        <img id="qr" width="180" height="180" alt="QR для входа игроков" />
         <p class="muted" id="join-url" style="word-break:break-all;font-size:0.85rem"></p>
       </div>
     </div>
