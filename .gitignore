@@ -1,0 +1,8 @@
+node_modules/
+uploads/*
+!uploads/.gitkeep
+media/*
+!media/.gitkeep
+!media/README.md
+.DS_Store
+*.log

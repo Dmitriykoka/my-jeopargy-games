@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админ — Совя игра</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1 class="brand">Админ пакетов</h1>
+      <div class="actions">
+        <a href="/host" style="color:var(--text);text-decoration:none;align-self:center">К ведущему</a>
+        <a href="/api/template.xlsx"><button type="button" class="secondary">Скачать Excel-шаблон</button></a>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <h2 style="margin-top:0">Пакеты</h2>
+        <ul class="players" id="pack-list"></ul>
+        <div class="admin-form" style="margin-top:1rem">
+          <label>
+            Новое название пакета
+            <input id="new-pack-name" placeholder="Сначала укажите имя" />
+          </label>
+          <button type="button" id="btn-create-pack">Создать пакет</button>
+        </div>
+        <p class="muted" style="margin-top:0.8rem">
+          Медиа-файлы кладите в папку <code>media/</code> на компьютере ведущего.
+          В вопросе указывайте имя файла, например <code>foto1.jpg</code>.
+        </p>
+      </div>
+
+      <div class="panel" id="editor" hidden>
+        <h2 style="margin-top:0" id="editor-title">Пакет</h2>
+        <div class="admin-form">
+          <label>
+            Название
+            <input id="edit-name" />
+          </label>
+          <div class="actions" style="justify-content:flex-start">
+            <button type="button" id="btn-save-pack">Сохранить</button>
+            <button type="button" class="bad" id="btn-delete-pack">Удалить</button>
+          </div>
+        </div>
+
+        <hr style="border-color:#2f5a88;margin:1.2rem 0" />
+
+        <h3>Импорт Excel</h3>
+        <p class="muted">Только после создания пакета с именем. Столбцы: category, value, question, answer, media, media_type.</p>
+        <input type="file" id="import-file" accept=".xlsx,.xls,.csv" />
+        <label style="display:flex;gap:0.5rem;align-items:center;margin:0.5rem 0">
+          <input type="checkbox" id="import-replace" />
+          Заменить все вопросы пакета
+        </label>
+        <button type="button" class="secondary" id="btn-import">Импортировать</button>
+
+        <hr style="border-color:#2f5a88;margin:1.2rem 0" />
+
+        <h3>Ручное редактирование</h3>
+        <div id="categories"></div>
+        <button type="button" class="secondary" id="btn-add-cat">+ Категория</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
